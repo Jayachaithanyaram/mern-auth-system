@@ -61,6 +61,11 @@ function Login() {
         <br /><br />
 
         <button type="submit">Login</button>
+        <br />
+
+        <a href="/forgot-password">
+          Forgot Password?
+        </a>
       </form>
 
       <br />
