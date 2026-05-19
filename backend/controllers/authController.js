@@ -35,13 +35,47 @@ const signupUser = async (req, res) => {
       password: hashedPassword,
     });
 
+    // Generate verification token
+    const verificationToken = crypto
+      .randomBytes(32)
+      .toString("hex");
+
+    // Hash token
+    const hashedVerificationToken = crypto
+      .createHash("sha256")
+      .update(verificationToken)
+      .digest("hex");
+
+    // Save token in DB
+    user.emailVerificationToken =
+      hashedVerificationToken;
+
+    // Expiry: 10 mins
+    user.emailVerificationExpire =
+      Date.now() + 10 * 60 * 1000;
+
+    const verificationUrl =
+      `http://localhost:5173/verify-email/${verificationToken}`;
+
+    const message = `
+Verify your email by clicking the link below:
+
+${verificationUrl}
+
+This link expires in 10 minutes.
+`;
+
+    await sendEmail({
+      email: user.email,
+      subject: "Email Verification",
+      message,
+    });
+
+    await user.save();
+
     res.status(201).json({
-      message: "User registered successfully",
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-      },
+      message:
+        "Registration successful. Please verify your email.",
     });
   } catch (error) {
     console.log(error);
@@ -83,6 +117,13 @@ const loginUser = async (req, res) => {
         message: "Invalid credentials",
       });
     }
+    // Check email verification
+    if (!user.isVerified) {
+      return res.status(401).json({
+        message:
+          "Please verify your email before logging in",
+      });
+    } 
 
     // Generate token
     const token = jwt.sign(
@@ -222,10 +263,56 @@ const resetPassword = async (req, res) => {
     });
   }
 };
+const verifyEmail = async (req, res) => {
+  try {
+    // Hash incoming token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    // Find user with valid token
+    const user = await User.findOne({
+      emailVerificationToken: hashedToken,
+      emailVerificationExpire: {
+        $gt: Date.now(),
+      },
+    });
+
+    // Check user exists
+    if (!user) {
+      return res.status(400).json({
+        message:
+          "Invalid or expired verification token",
+      });
+    }
+
+    // Verify account
+    user.isVerified = true;
+
+    // Clear token fields
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpire = undefined;
+
+    // Save updated user
+    await user.save();
+
+    res.status(200).json({
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
 module.exports = {
   signupUser,
   loginUser,
   getMe,
   forgotPassword,
   resetPassword,
+  verifyEmail,
 };
