@@ -26,6 +26,11 @@ function Dashboard() {
 
     fetchUser();
   }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+
+    window.location.href = "/login";
+  };
 
   return (
     <div style={{ padding: "40px" }}>
@@ -39,6 +44,9 @@ function Dashboard() {
       ) : (
         <p>Loading...</p>
       )}
+      <button onClick={handleLogout}>
+        Logout
+      </button>
     </div>
   );
 }
