@@ -2,6 +2,10 @@ const User = require("../models/user.js");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/generateTokens");
 
 const signupUser = async (req, res) => {
   try {
@@ -123,22 +127,19 @@ const loginUser = async (req, res) => {
         message:
           "Please verify your email before logging in",
       });
-    } 
+    }
 
-    // Generate token
-    const token = jwt.sign(
-      {
-        id: user._id,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
-    );
+    // Generate tokens
+    const accessToken =
+      generateAccessToken(user._id);
+
+    const refreshToken =
+      generateRefreshToken(user._id);
 
     res.status(200).json({
       message: "Login successful",
-      token,
+      accessToken,
+      refreshToken,
       user: {
         id: user._id,
         username: user.username,

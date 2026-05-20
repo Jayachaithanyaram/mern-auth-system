@@ -27,7 +27,15 @@ function Login() {
       );
 
       // Store token
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem(
+        "token",
+        res.data.accessToken
+      );
+
+      localStorage.setItem(
+        "refreshToken",
+        res.data.refreshToken
+      );
 
       alert(res.data.message);
 
