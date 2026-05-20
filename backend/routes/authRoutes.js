@@ -27,6 +27,7 @@ router.get(
   "/verify-email/:token",
   verifyEmail
 );
+//implemented full adimin route with admin middleware
 router.get(
   "/admin",
   protect,
