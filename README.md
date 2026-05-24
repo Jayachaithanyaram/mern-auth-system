@@ -5,7 +5,7 @@ A full production-ready MERN authentication system with advanced authentication 
 ## 🚀 Live Demo
 
 ### Frontend
-mern-auth-system-12nke938c-jayachaithanyarams-projects.vercel.app
+https://mern-auth-system-12nke938c-jayachaithanyarams-projects.vercel.app
 
 ### Backend
 https://mern-auth-backend-rrkc.onrender.com
