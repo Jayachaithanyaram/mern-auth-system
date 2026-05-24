@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 
 function ResetPassword() {
@@ -13,8 +13,8 @@ function ResetPassword() {
     e.preventDefault();
 
     try {
-      const res = await axios.put(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
+      const res = await api.put(
+        `/auth/reset-password/${token}`,
         { password }
       );
 

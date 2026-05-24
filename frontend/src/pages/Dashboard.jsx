@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -7,27 +7,24 @@ function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
 
-        const res = await axios.get(
-          "http://localhost:5000/api/auth/me",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await api.get("/auth/me");
 
         setUser(res.data);
+
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchUser();
+
   }, []);
+
   const handleLogout = () => {
+
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
 
     window.location.href = "/login";
   };
@@ -44,6 +41,7 @@ function Dashboard() {
       ) : (
         <p>Loading...</p>
       )}
+
       <button onClick={handleLogout}>
         Logout
       </button>
