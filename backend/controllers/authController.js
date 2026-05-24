@@ -155,6 +155,46 @@ const loginUser = async (req, res) => {
   }
 };
 
+const refreshAccessToken = async (
+  req,
+  res
+) => {
+  try {
+
+    // Get refresh token
+    const { refreshToken } = req.body;
+
+    // Check token exists
+    if (!refreshToken) {
+      return res.status(401).json({
+        message: "Refresh token required",
+      });
+    }
+
+    // Verify refresh token
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    // Generate new access token
+    const newAccessToken =
+      generateAccessToken(decoded.id);
+
+    res.status(200).json({
+      accessToken: newAccessToken,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(403).json({
+      message:
+        "Invalid or expired refresh token",
+    });
+  }
+};
 
 const getMe = async (req, res) => {
   res.status(200).json(req.user);
@@ -316,4 +356,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  refreshAccessToken,
 };
