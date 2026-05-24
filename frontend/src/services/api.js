@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://mern-auth-backend-rrkc.onrender.com/api"
 });
 
 // Attach access token automatically
@@ -51,7 +51,7 @@ api.interceptors.response.use(
 
         // Request new access token
         const res = await axios.post(
-          "http://localhost:5000/api/auth/refresh-token",
+          "https://mern-auth-backend-rrkc.onrender.com/api/auth/refresh-token",
           {
             refreshToken,
           }
