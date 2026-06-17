@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
 import { useParams, useNavigate } from "react-router-dom";
+import "../styles/ResetPassword.css";
 
 function ResetPassword() {
   const { token } = useParams();
@@ -27,25 +28,41 @@ function ResetPassword() {
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>Reset Password</h1>
+  <div className="reset-page">
+
+    <div className="reset-card">
+
+      <h1 className="reset-title">
+        Reset Password
+      </h1>
+
+      <p className="reset-subtitle">
+        Create a strong new password for your account.
+      </p>
 
       <form onSubmit={handleSubmit}>
+
         <input
           type="password"
           placeholder="Enter new password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="reset-input"
         />
 
-        <br /><br />
-
-        <button type="submit">
+        <button
+          type="submit"
+          className="reset-btn"
+        >
           Reset Password
         </button>
+
       </form>
+
     </div>
-  );
+
+  </div>
+);
 }
 
 export default ResetPassword;
