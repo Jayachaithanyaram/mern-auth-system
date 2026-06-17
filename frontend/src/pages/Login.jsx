@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import "../styles/Login.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -46,41 +47,59 @@ function Login() {
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>Login</h1>
+  <div className="login-page">
+    <div className="login-card">
+
+      <h1 className="login-title">
+        Welcome Back
+      </h1>
+
+      <p className="login-subtitle">
+        Login to your account
+      </p>
 
       <form onSubmit={handleSubmit}>
+
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="Email Address"
           onChange={handleChange}
+          className="login-input"
         />
-
-        <br /><br />
 
         <input
           type="password"
           name="password"
           placeholder="Password"
           onChange={handleChange}
+          className="login-input"
         />
 
-        <br /><br />
+        <button
+          type="submit"
+          className="login-btn"
+        >
+          Login
+        </button>
 
-        <button type="submit">Login</button>
-        <br />
-
-        <a href="/forgot-password">
-          Forgot Password?
-        </a>
       </form>
 
-      <br />
+      <div className="login-links">
 
-      <Link to="/">Create account</Link>
+        <Link to="/forgot-password">
+          Forgot Password?
+        </Link>
+
+        <Link to="/">
+          Create Account
+        </Link>
+
+      </div>
+
     </div>
-  );
+  </div>
+);
 }
 
 export default Login;
