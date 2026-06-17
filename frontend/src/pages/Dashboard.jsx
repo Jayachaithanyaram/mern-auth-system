@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import "../styles/Dashboard.css";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -30,23 +31,59 @@ function Dashboard() {
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>Dashboard</h1>
+  <div className="dashboard-page">
 
-      {user ? (
-        <div>
-          <h2>Welcome {user.username}</h2>
-          <p>{user.email}</p>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+    <div className="dashboard-navbar">
 
-      <button onClick={handleLogout}>
+      <h1 className="dashboard-logo">
+        MERN Auth System
+      </h1>
+
+      <button
+        className="logout-btn"
+        onClick={handleLogout}
+      >
         Logout
       </button>
+
     </div>
-  );
+
+    {user ? (
+
+      <div className="profile-card">
+
+        <div className="profile-avatar">
+          {user.username.charAt(0).toUpperCase()}
+        </div>
+
+        <h2>
+          Welcome Back 👋
+        </h2>
+
+        <h3>
+          {user.username}
+        </h3>
+
+        <p>
+          {user.email}
+        </p>
+
+        <div className="status-badge">
+          Active User
+        </div>
+
+      </div>
+
+    ) : (
+
+      <p className="loading-text">
+        Loading...
+      </p>
+
+    )}
+
+  </div>
+);
 }
 
 export default Dashboard;
